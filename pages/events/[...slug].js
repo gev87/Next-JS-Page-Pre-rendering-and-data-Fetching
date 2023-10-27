@@ -41,7 +41,7 @@ function FilteredEventsPage() {
       </Fragment>
     );
   }
-
+console.log("date",numYear,numMonth,filterData,router.query);
   const filteredEvents = getFilteredEvents({
     year: numYear,
     month: numMonth,
@@ -69,5 +69,9 @@ function FilteredEventsPage() {
     </Fragment>
   );
 }
+
+// export async function getServerSideProps(){
+
+// }
 
 export default FilteredEventsPage;
