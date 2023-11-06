@@ -4,9 +4,8 @@ import {
   ref,
   equalTo,
   query,
-  child,
-  once,
-  limitToFirst,
+  startAt,
+  endAt,
 } from "firebase/database";
 import { database } from "../firebase";
 
@@ -72,6 +71,32 @@ export async function getEventById(eventName) {
       return data;
     } else {
       console.log("No data available");
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+export async function getFilteredEvents(date) {
+
+  try {
+    // Create a query to filter data where 'featuredEvents' is true
+    const filterParams = query(
+      dataRef,
+      orderByChild("date"),
+      startAt(date),
+      endAt(`${date}\uf8ff`)
+    );
+    const snapshot = await get(filterParams);
+
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const transformedData = dataTransformer(data);
+      console.log("Data:", data, transformedData);
+      return transformedData;
+    } else {
+      console.log("No featured events found");
+      return null;
     }
   } catch (error) {
     console.error("Error fetching data:", error);
